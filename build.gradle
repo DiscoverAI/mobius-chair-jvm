@@ -70,7 +70,7 @@ uploadArchives {
 
                 licenses {
                     license {
-                        name 'Apache License'
+                        name 'Apache-2.0 License'
                         url 'https://github.com/meandor/transporter/blob/master/LICENSE'
                     }
                 }
