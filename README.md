@@ -13,24 +13,24 @@ A Scala library for versioning data (datasets, models) on an HDFS.
 ## Testing
 Execute the tests with gradle:
 ```bash
-./gradlew check
+./bin/go check
 ```
 
 ## Building
 To build with gradle:
 ```bash
-./gradlew clean build
+./bin/go clean build
 ```
 This will create a jar file in `./build/libs` without the dependencies.
 
 ## Releasing and Publishing
 ```bash
-./gradlew release
+./bin/go release
 ```
 Will release a newer version with semantic versioning 
 
 ```bash
-./gradlew publish
+./bin/go publish
 ```
 
 will publish the artifact to maven central.
