@@ -4,6 +4,11 @@ import org.apache.hadoop.fs.{FileSystem, Path}
 
 object MobiusChair {
 
+  def nextGeneration(fileSystem: FileSystem, path: String): String = {
+    val currentGeneration = latestGeneration(fileSystem, path)
+    "%04d".format(currentGeneration.toInt + 1)
+  }
+
   def latestGeneration(fileSystem: FileSystem, path: String): String = {
     val fullPath = new Path(path)
     val generations = fileSystem.listStatus(fullPath)

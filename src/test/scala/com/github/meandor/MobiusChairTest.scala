@@ -17,4 +17,14 @@ class MobiusChairTest extends FeatureSpec with Matchers {
       MobiusChair.latestGeneration(localHDFS, s"$basePath/inFooBar/0002") shouldBe "0009"
     }
   }
+
+  feature("get next generation in path") {
+    scenario("one generation already existing") {
+      MobiusChair.nextGeneration(localHDFS, s"$basePath/inFoo") shouldBe "0002"
+    }
+
+    scenario("nothing existing yet") {
+      MobiusChair.nextGeneration(localHDFS, s"$basePath/inFoo/0001") shouldBe "0001"
+    }
+  }
 }
