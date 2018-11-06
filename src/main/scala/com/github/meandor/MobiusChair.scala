@@ -1,12 +1,16 @@
 package com.github.meandor
 
+import com.typesafe.scalalogging.LazyLogging
 import org.apache.hadoop.fs.{FileSystem, Path}
 
-object MobiusChair {
+object MobiusChair extends LazyLogging {
   def outputPath(fileSystem: FileSystem, basePath: String, name: String, version: String): String = {
     val jobOutputPath = s"$basePath/$name/$version"
-    createIfNotAvailable(fileSystem, jobOutputPath)
+    if (createIfNotAvailable(fileSystem, jobOutputPath)) {
+      logger.info("Output folder created")
+    }
     val generation = nextGeneration(fileSystem, jobOutputPath)
+    logger.info(s"Next generation: $generation")
     s"$jobOutputPath/$generation"
   }
 
@@ -23,10 +27,13 @@ object MobiusChair {
       .filter(s => s.matches("^\\d+$"))
 
     if (generations.isEmpty) {
+      logger.info("Did not find current generation")
       return None
     }
 
-    Some(generations.max)
+    val latest = generations.max
+    logger.info(s"Latest generation: $latest")
+    Some(latest)
   }
 
   def cleanUpGenerations(fileSystem: FileSystem, path: String, noToKeep: Int): Seq[String] = {

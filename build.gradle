@@ -13,6 +13,7 @@ def scalaVersion = "2.11"
 
 dependencies {
     compile "org.scala-lang:scala-library:$scalaVersion.12"
+    compile "com.typesafe.scala-logging:scala-logging_$scalaVersion:3.9.0"
     compile 'org.apache.hadoop:hadoop-client:2.8.5'
 
     testCompile "org.scalatest:scalatest_$scalaVersion:3.0.5"
