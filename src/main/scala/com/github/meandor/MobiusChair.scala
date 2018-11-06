@@ -39,7 +39,7 @@ object MobiusChair {
     toBeDeleted
   }
 
-  def createOutputIfNotAvailable(fileSystem: FileSystem, pathName: String): Boolean = {
+  def createIfNotAvailable(fileSystem: FileSystem, pathName: String): Boolean = {
     val path = new Path(pathName)
     if (!fileSystem.exists(path)) {
       fileSystem.mkdirs(path)
