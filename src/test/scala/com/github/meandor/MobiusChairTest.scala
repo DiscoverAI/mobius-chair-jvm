@@ -56,4 +56,29 @@ class MobiusChairTest extends FeatureSpec with Matchers {
       tmpBasePath.list().toSeq should contain theSameElementsAs Seq("0007", "0008")
     }
   }
+
+  feature("should calculate next output folder") {
+    scenario("output folder not existing yet") {
+      Files.deleteIfExists(Paths.get(s"$basePath/nonExistent/0001/0001"))
+      Files.deleteIfExists(Paths.get(s"$basePath/nonExistent/0001"))
+      Files.deleteIfExists(Paths.get(s"$basePath/nonExistent"))
+
+      val actual = MobiusChair.outputPath(localHDFS, basePath, "nonExistent", "0001")
+
+      actual shouldBe s"$basePath/nonExistent/0001/0001"
+      Files.exists(Paths.get(s"$basePath/nonExistent/0001")) shouldBe true
+    }
+
+    scenario("no generation existing yet") {
+      val actual = MobiusChair.outputPath(localHDFS, basePath, "inFoo", "0001")
+
+      actual shouldBe s"$basePath/inFoo/0001/0001"
+    }
+
+    scenario("generations already existing") {
+      val actual = MobiusChair.outputPath(localHDFS, basePath, "inFooBar", "0002")
+
+      actual shouldBe s"$basePath/inFooBar/0002/0010"
+    }
+  }
 }

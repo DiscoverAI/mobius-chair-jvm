@@ -3,6 +3,12 @@ package com.github.meandor
 import org.apache.hadoop.fs.{FileSystem, Path}
 
 object MobiusChair {
+  def outputPath(fileSystem: FileSystem, basePath: String, name: String, version: String): String = {
+    val jobOutputPath = s"$basePath/$name/$version"
+    createIfNotAvailable(fileSystem, jobOutputPath)
+    val generation = nextGeneration(fileSystem, jobOutputPath)
+    s"$jobOutputPath/$generation"
+  }
 
   def nextGeneration(fileSystem: FileSystem, path: String): String = {
     val currentGeneration = latestGeneration(fileSystem, path)
