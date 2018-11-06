@@ -12,12 +12,12 @@ class MobiusChairTest extends FeatureSpec with Matchers {
   val localHDFS: LocalFileSystem = FileSystem.getLocal(new Configuration())
 
   feature("should get latest generation in path") {
-    scenario("should return 0000 when nothing existing yet") {
-      MobiusChair.latestGeneration(localHDFS, s"$basePath/inFoo/0001") shouldBe "0000"
+    scenario("should return None when nothing existing yet") {
+      MobiusChair.latestGeneration(localHDFS, s"$basePath/inFoo/0001") shouldBe None
     }
 
     scenario("should return latest when n generations existing") {
-      MobiusChair.latestGeneration(localHDFS, s"$basePath/inFooBar/0002") shouldBe "0009"
+      MobiusChair.latestGeneration(localHDFS, s"$basePath/inFooBar/0002").get shouldBe "0009"
     }
   }
 

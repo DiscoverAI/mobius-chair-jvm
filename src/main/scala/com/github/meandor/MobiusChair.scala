@@ -6,10 +6,10 @@ object MobiusChair {
 
   def nextGeneration(fileSystem: FileSystem, path: String): String = {
     val currentGeneration = latestGeneration(fileSystem, path)
-    "%04d".format(currentGeneration.toInt + 1)
+    "%04d".format(currentGeneration.getOrElse("0000").toInt + 1)
   }
 
-  def latestGeneration(fileSystem: FileSystem, path: String): String = {
+  def latestGeneration(fileSystem: FileSystem, path: String): Option[String] = {
     val fullPath = new Path(path)
     val generations = fileSystem.listStatus(fullPath)
       .filter(status => status.isDirectory)
@@ -17,10 +17,10 @@ object MobiusChair {
       .filter(s => s.matches("^\\d+$"))
 
     if (generations.isEmpty) {
-      return "0000"
+      return None
     }
 
-    generations.max
+    Some(generations.max)
   }
 
   def cleanUpGenerations(fileSystem: FileSystem, path: String, noToKeep: Int): Seq[String] = {
