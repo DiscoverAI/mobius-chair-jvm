@@ -1,4 +1,4 @@
-# Mobius Chair
+# Mobius Chair (JVM)
 
 [![CircleCI](https://circleci.com/gh/meandor/mobius-chair.svg?style=svg)](https://circleci.com/gh/meandor/mobius-chair)
 [![GitHub license](https://img.shields.io/github/license/meandor/mobius-chair.svg)](https://github.com/meandor/mobius-chair/blob/master/LICENSE)
@@ -8,7 +8,7 @@
 >
 > -- http://dc.wikia.com/wiki/Mobius_Chair
 
-A Scala library for versioning data (datasets, models) on an HDFS.
+A Scala library for versioning data (datasets, models) on an HDFS. This can be used by JVM applications.
 
 ## Testing
 Execute the tests with gradle:
