@@ -1,6 +1,6 @@
 # Mobius Chair (JVM)
 
-[![CircleCI](https://circleci.com/gh/meandor/mobius-chair.svg?style=svg)](https://circleci.com/gh/meandor/mobius-chair)
+[![CircleCI](https://circleci.com/gh/DiscoverAI/mobius-chair-jvm.svg?style=svg)](https://circleci.com/gh/DiscoverAI/mobius-chair-jvm)
 [![GitHub license](https://img.shields.io/github/license/meandor/mobius-chair.svg)](https://github.com/meandor/mobius-chair/blob/master/LICENSE)
 [![release](https://maven-badges.herokuapp.com/maven-central/com.github.meandor/mobius-chair/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.meandor/mobius-chair) 
 
