@@ -1,5 +1,7 @@
 package com.github.meandor
 
+import java.io.File
+
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.hadoop.fs.{FileSystem, Path}
 
@@ -36,13 +38,17 @@ object MobiusChair extends LazyLogging {
     Some(latest)
   }
 
+  def versionFromPath(path:String): Int = {
+    Integer.parseInt(new File(path).getName)
+  }
+
   def cleanUpGenerations(fileSystem: FileSystem, path: String, noToKeep: Int): Seq[String] = {
     val fullPath = new Path(path)
     val generations = fileSystem.listStatus(fullPath)
       .filter(status => status.isDirectory)
       .map(_.getPath.toString)
       .filter(s => s.matches("^.*/\\d{4}$"))
-      .sorted
+      .sortWith(versionFromPath(_) < versionFromPath(_))
 
     val toBeDeleted = generations.take(generations.length - noToKeep)
     toBeDeleted.foreach(pathString => {
