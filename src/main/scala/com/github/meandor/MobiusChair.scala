@@ -6,6 +6,9 @@ import com.typesafe.scalalogging.LazyLogging
 import org.apache.hadoop.fs.{FileSystem, Path}
 
 object MobiusChair extends LazyLogging {
+
+  val versionizedPathFormat = "^.*/\\d{4}$"
+
   def outputPath(fileSystem: FileSystem, basePath: String, name: String, version: String): String = {
     val jobOutputPath = s"$basePath/$name/$version"
     if (createIfNotAvailable(fileSystem, jobOutputPath)) {
@@ -25,8 +28,8 @@ object MobiusChair extends LazyLogging {
     val fullPath = new Path(path)
     val generations = fileSystem.listStatus(fullPath)
       .filter(status => status.isDirectory)
-      .map(_.getPath.toString.split("/").last)
-      .filter(s => s.matches("^\\d+$"))
+      .filter(s => s.getPath.toString.matches(versionizedPathFormat))
+      .map(_.getPath.getName)
 
     if (generations.isEmpty) {
       logger.info("Did not find current generation")
@@ -47,7 +50,7 @@ object MobiusChair extends LazyLogging {
     val generations = fileSystem.listStatus(fullPath)
       .filter(status => status.isDirectory)
       .map(_.getPath.toString)
-      .filter(s => s.matches("^.*/\\d{4}$"))
+      .filter(s => s.matches(versionizedPathFormat))
       .sortWith(versionFromPath(_) < versionFromPath(_))
 
     val toBeDeleted = generations.take(generations.length - noToKeep)
