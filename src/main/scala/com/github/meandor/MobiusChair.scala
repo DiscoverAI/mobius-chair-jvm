@@ -26,22 +26,24 @@ object MobiusChair extends LazyLogging {
 
   def latestGeneration(fileSystem: FileSystem, path: String): Option[String] = {
     val fullPath = new Path(path)
-    val generations = fileSystem.listStatus(fullPath)
+    val generationsFolders = fileSystem.listStatus(fullPath)
       .filter(status => status.isDirectory)
+    val generations = generationsFolders
       .filter(s => s.getPath.toString.matches(versionizedPathFormat))
-      .map(_.getPath.getName)
 
     if (generations.isEmpty) {
       logger.info("Did not find current generation")
       return None
     }
 
-    val latest = generations.max
+    val generationsNames = generations.map(_.getPath.getName)
+
+    val latest = generationsNames.max
     logger.info(s"Latest generation: $latest")
     Some(latest)
   }
 
-  def versionFromPath(path:String): Int = {
+  def versionFromPath(path: String): Int = {
     Integer.parseInt(new File(path).getName)
   }
 
