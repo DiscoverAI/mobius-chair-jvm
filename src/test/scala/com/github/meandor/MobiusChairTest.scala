@@ -5,42 +5,43 @@ import java.nio.file.{Files, Paths}
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, LocalFileSystem}
-import org.scalatest.{FeatureSpec, Matchers}
+import org.scalatest.featurespec.AnyFeatureSpec
+import org.scalatest.matchers.should.Matchers
 
-class MobiusChairTest extends FeatureSpec with Matchers {
+class MobiusChairTest extends AnyFeatureSpec with Matchers {
   val basePath = "src/test/resources/filesystem"
   val localHDFS: LocalFileSystem = FileSystem.getLocal(new Configuration())
 
-  feature("should get latest generation in path") {
-    scenario("should return None when nothing existing yet") {
+  Feature("should get latest generation in path") {
+    Scenario("should return None when nothing existing yet") {
       MobiusChair.latestGeneration(localHDFS, s"$basePath/inFoo/0001") shouldBe None
     }
 
-    scenario("should return latest when n generations existing") {
+    Scenario("should return latest when n generations existing") {
       MobiusChair.latestGeneration(localHDFS, s"$basePath/inFooBar/0002").get shouldBe "0009"
     }
   }
 
-  feature("should get next generation in path") {
-    scenario("one generation already existing") {
+  Feature("should get next generation in path") {
+    Scenario("one generation already existing") {
       MobiusChair.nextGeneration(localHDFS, s"$basePath/inFoo") shouldBe "0002"
     }
 
-    scenario("nothing existing yet") {
+    Scenario("nothing existing yet") {
       MobiusChair.nextGeneration(localHDFS, s"$basePath/inFoo/0001") shouldBe "0001"
     }
   }
 
-  feature("should clean up old generations") {
-    scenario("keep only 3 generations and one generation existing") {
+  Feature("should clean up old generations") {
+    Scenario("keep only 3 generations and one generation existing") {
       MobiusChair.cleanUpGenerations(localHDFS, s"$basePath/inFoo", 3) shouldBe Seq()
     }
 
-    scenario("keep only 3 generations and n < 3 generation existing") {
+    Scenario("keep only 3 generations and n < 3 generation existing") {
       MobiusChair.cleanUpGenerations(localHDFS, s"$basePath/inFooBar/0002", 3) shouldBe Seq()
     }
 
-    scenario("keep only 2 generations and 3 generation existing") {
+    Scenario("keep only 2 generations and 3 generation existing") {
       try {
         Files.createDirectories(Paths.get(s"$basePath/infoofoo/0006"))
         Files.createFile(Paths.get(s"$basePath/0006/_SUCCESS"))
@@ -57,8 +58,8 @@ class MobiusChairTest extends FeatureSpec with Matchers {
     }
   }
 
-  feature("should calculate next output folder") {
-    scenario("output folder not existing yet") {
+  Feature("should calculate next output folder") {
+    Scenario("output folder not existing yet") {
       Files.deleteIfExists(Paths.get(s"$basePath/nonExistent/0001/0001"))
       Files.deleteIfExists(Paths.get(s"$basePath/nonExistent/0001"))
       Files.deleteIfExists(Paths.get(s"$basePath/nonExistent"))
@@ -69,13 +70,13 @@ class MobiusChairTest extends FeatureSpec with Matchers {
       Files.exists(Paths.get(s"$basePath/nonExistent/0001")) shouldBe true
     }
 
-    scenario("no generation existing yet") {
+    Scenario("no generation existing yet") {
       val actual = MobiusChair.outputPath(localHDFS, basePath, "inFoo", "0001")
 
       actual shouldBe s"$basePath/inFoo/0001/0001"
     }
 
-    scenario("generations already existing") {
+    Scenario("generations already existing") {
       val actual = MobiusChair.outputPath(localHDFS, basePath, "inFooBar", "0002")
 
       actual shouldBe s"$basePath/inFooBar/0002/0010"
