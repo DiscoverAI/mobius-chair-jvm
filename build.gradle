@@ -9,8 +9,8 @@ plugins {
 
 group = "com.github.meandor"
 
-def scalaCompatVersion = "2.13"
-def scalaVersion = "$scalaCompatVersion.2"
+def scalaCompatVersion = "2.12"
+def scalaVersion = "$scalaCompatVersion.10"
 
 dependencies {
     compile "org.scala-lang:scala-library:$scalaVersion"
